@@ -17,7 +17,7 @@ class ProcessLogger{
         return result;
     }
 
-    private PerformanceCounter Counter;
+    private PerformanceCounter Counter {get;}
 
     public string Name {get;}
     
