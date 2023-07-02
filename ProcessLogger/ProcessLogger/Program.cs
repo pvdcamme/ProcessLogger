@@ -1,6 +1,19 @@
-﻿// See https://aka.ms/new-console-template for more information
-using System.Diagnostics;
+﻿using System.Diagnostics;
 
 
-var currentProcess = Process.GetProcesses();
-Console.WriteLine("Currently running " + currentProcess.Length + " processes");
+
+PerformanceCounterCategory cat = new("Process");
+string[] runningProcesses = cat.GetInstanceNames();
+foreach (var name in runningProcesses)
+{
+    try
+    {
+        PerformanceCounter counter = new("Process", "% Processor Time", name, true);
+        Console.WriteLine(name + " -- " + counter.NextValue());
+
+    }
+    catch (System.InvalidOperationException)
+    {
+        Console.WriteLine(name + " does not support getting processor Time");
+    }
+}
