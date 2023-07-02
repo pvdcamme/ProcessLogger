@@ -6,10 +6,6 @@ Provides factory methods to generalize easily create an instance for the
 whole system.
 */
 class ProcessLogger{
-    public static string[] RunningProcessesNames(){
-        PerformanceCounterCategory cat = new("Process");
-        return cat.GetInstanceNames();
-    }
 
     public static IEnumerable<ProcessLogger> RunningProcesses(){
         PerformanceCounterCategory cat = new("Process");
@@ -22,7 +18,7 @@ class ProcessLogger{
     }
 
 
-    private string name;
+    public string name {get;}
     private ProcessLogger(string name){
         this.name = name;
     }
