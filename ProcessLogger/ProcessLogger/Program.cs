@@ -7,8 +7,7 @@ foreach (var proc in ProcessLogger.RunningProcesses())
 {
     try
     {
-        PerformanceCounter counter = new("Process", "% Processor Time", proc.Name, true);
-        Console.WriteLine(proc.Name + " -- " + counter.NextValue());
+        Console.WriteLine(proc.Name + " -- " + proc.GetProcessorTime());
     }
     catch (System.InvalidOperationException)
     {
