@@ -3,7 +3,7 @@
 
 /** A very early prototype to gather log the process run-times
 */
-foreach (var name in ProcessLogger.RunningProcesses())
+foreach (var name in ProcessLogger.RunningProcessesNames())
 {
     try
     {
