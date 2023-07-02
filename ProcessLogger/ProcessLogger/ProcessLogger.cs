@@ -18,8 +18,8 @@ class ProcessLogger{
     }
 
 
-    public string name {get;}
+    public string Name {get;}
     private ProcessLogger(string name){
-        this.name = name;
+        this.Name = name;
     }
 }
