@@ -17,10 +17,8 @@ class ProcessLogger{
         return result;
     }
 
+    public string Name {get;}    
     private PerformanceCounter Counter {get;}
-
-    public string Name {get;}
-    
 
     private ProcessLogger(string name){
         this.Name = name;
