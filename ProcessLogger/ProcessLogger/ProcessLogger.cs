@@ -23,8 +23,7 @@ public class ProcessLogger
 
     public string Name { get; }
     private PerformanceCounter Counter { get; }
-    private int ReadFailures;
-    private int ReadAttempt;
+    private int ReadFailures;    
 
     private ProcessLogger(string name)
     {
@@ -34,8 +33,7 @@ public class ProcessLogger
 
     public float GetProcessorTime()
     {
-        float result = 0;
-        ReadAttempt++;
+        float result = 0;          
         try
         {
             result = Counter.NextValue();
@@ -43,7 +41,6 @@ public class ProcessLogger
         catch (InvalidOperationException)
         {
             ReadFailures++;
-            Console.WriteLine("Failed to read " + Name + " " + ReadFailures + " / " + ReadAttempt);
         }
         return result;
     }
