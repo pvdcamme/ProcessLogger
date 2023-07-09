@@ -1,12 +1,12 @@
 
 using System.Diagnostics;
-using System.Net.Mail;
 
+namespace ProcessLogger { 
 /** Logs results from a single Process.
 Provides factory methods to generalize easily create an instance for the 
 whole system.()
 */
-class ProcessLogger
+public class ProcessLogger
 {
 
     public static IEnumerable<ProcessLogger> RunningProcesses()
@@ -47,4 +47,5 @@ class ProcessLogger
         }
         return result;
     }
+}
 }
