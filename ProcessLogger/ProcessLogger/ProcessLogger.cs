@@ -32,18 +32,23 @@ whole system.()
             this.Counter = new("Process", "% Processor Time", name, true);
         }
 
+        public bool IsFailing()
+        {
+            return ReadFailures > 0;
+        }
+
         public float GetProcessorTime()
         {
-            float result = 0;
+            const float DEFAULT_TIME = 0;
             try
             {
-                result = Counter.NextValue();
+                return Counter.NextValue();
             }
             catch (InvalidOperationException)
             {
                 ReadFailures++;
             }
-            return result;
+            return DEFAULT_TIME;
         }
     }
 }
