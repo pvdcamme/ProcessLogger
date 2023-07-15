@@ -5,9 +5,33 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using System.Reflection.PortableExecutable;
 
 namespace FileLog
 {
+    public readonly struct LogEntry
+    {
+        public string Key { get; }
+        public float Value { get; }
+        public long When { get; }
+
+        public LogEntry(string key, float value)
+        {
+            Key = key;  
+            Value = value;
+            When = DateTime.Now.Ticks;
+        }
+        public readonly override string ToString()
+        {
+            return $"{When}::{Key}::{Value}";
+        }
+
+        internal static LogEntry FromLine()
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     public class FileLog
     {
         public static FileLog InDocuments(string Name)
@@ -23,12 +47,25 @@ namespace FileLog
             this.SavePath = SavePath;
         }
 
+        public void Reset()
+        {
+            File.Delete(SavePath);
+        }
+
+
         public void AddEntry(string key, float val)
         {
             using(StreamWriter output = new StreamWriter(SavePath))
             {
-                output.WriteLine($"{key} :: {val}");
+                var entry = new LogEntry(key, val);
+                output.WriteLine(entry.ToString()); 
             }
+        }
+
+        public IEnumerable<LogEntry> GetEntries()
+        {
+            List<LogEntry> entries = new();
+            return entries;
         }
     }
 }

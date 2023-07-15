@@ -12,13 +12,23 @@ namespace ProcessLogger.Test
         {
             try
             {
-                FileLog.InDocuments("test.txt");
+                var logger = FileLog.InDocuments("test.txt");
+                logger.Reset();
             }
             catch (Exception)
             {
                 Assert.Fail("Can't create");
 
             }
+        }
+
+        [Fact]  
+        public void AddEntries()
+        {
+            var logger = FileLog.InDocuments("test.txt");
+            logger.Reset();
+            logger.AddEntry("test", 1f);
+            Assert.NotEmpty(logger.GetEntries());
         }
     }
 }
