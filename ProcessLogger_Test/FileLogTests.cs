@@ -23,12 +23,19 @@ namespace ProcessLogger.Test
         }
 
         [Fact]  
-        public void AddEntries()
+        public void AddSingleEntry()
         {
             var logger = FileLog.InDocuments("test.txt");
             logger.Reset();
             logger.AddEntry("test", 1f);
-            Assert.NotEmpty(logger.GetEntries());
+
+            var savedResults = logger.GetEntries();
+            Assert.Single(savedResults);
+
+            LogEntry soleResult = savedResults.Single();
+
+            Assert.Equal("test", soleResult.Key);
+            Assert.Equal(1f, soleResult.Value);
         }
     }
 }

@@ -15,6 +15,13 @@ namespace FileLog
         public float Value { get; }
         public long When { get; }
 
+        public LogEntry(string key, float value, long when)
+        {
+            Key = key;
+            Value = value;
+            When = when;
+        }
+
         public LogEntry(string key, float value)
         {
             Key = key;  
@@ -26,9 +33,14 @@ namespace FileLog
             return $"{When}::{Key}::{Value}";
         }
 
-        internal static LogEntry FromLine()
+        internal static LogEntry FromLine(string line)
         {
-            throw new NotImplementedException();
+            string[] parts = line.Split("::");
+            var when = long.Parse(parts[0]);
+            var key = parts[1];
+            var val = float.Parse(parts[2]);
+
+            return new(key, val, when);
         }
     }
 
@@ -65,7 +77,18 @@ namespace FileLog
         public IEnumerable<LogEntry> GetEntries()
         {
             List<LogEntry> entries = new();
+
+            using(StreamReader reader = new(SavePath))
+            {
+                string? line = reader.ReadLine();
+                while (line != null) 
+                {
+                    entries.Add(LogEntry.FromLine(line));
+                    line = reader.ReadLine();
+                }
+            }
             return entries;
+
         }
     }
 }
