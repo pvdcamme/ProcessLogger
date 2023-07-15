@@ -1,7 +1,6 @@
 namespace ProcessLogger_Test
 {
     using ProcessLogger;
-    using System.Linq.Expressions;
 
     public class ProcessTests
     {
