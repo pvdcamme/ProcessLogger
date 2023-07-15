@@ -8,7 +8,7 @@ namespace ProcessLogger_Test
         [Fact]
         public void ExpectsSomeProcesses()
         {
-            var currentProcesses = ProcessLogger.RunningProcesses();
+            var currentProcesses = ProcessTracker.RunningProcesses();
             Assert.NotEmpty(currentProcesses);
         }
 
@@ -16,7 +16,7 @@ namespace ProcessLogger_Test
         [Fact]
         public void CheckHasNextValues()
         {
-            foreach (ProcessLogger aLogger in ProcessLogger.RunningProcesses())
+            foreach (ProcessTracker aLogger in ProcessTracker.RunningProcesses())
             {
                 Assert.True(aLogger.GetProcessorTime() >= 0, "Postive CPU time expexted");
             }

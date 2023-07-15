@@ -7,17 +7,17 @@ namespace ProcessLogger
 Provides factory methods to generalize easily create an instance for the 
 whole system.()
 */
-    public class ProcessLogger
+    public class ProcessTracker
     {
 
-        public static IEnumerable<ProcessLogger> RunningProcesses()
+        public static IEnumerable<ProcessTracker> RunningProcesses()
         {
             PerformanceCounterCategory cat = new("Process");
-            List<ProcessLogger> result = new();
+            List<ProcessTracker> result = new();
 
             foreach (string name in cat.GetInstanceNames())
             {
-                result.Add(new ProcessLogger(name));
+                result.Add(new ProcessTracker(name));
             }
             return result;
         }
@@ -26,7 +26,7 @@ whole system.()
         private PerformanceCounter Counter { get; }
         private int ReadFailures;
 
-        private ProcessLogger(string name)
+        private ProcessTracker(string name)
         {
             this.Name = name;
             this.Counter = new("Process", "% Processor Time", name, true);

@@ -5,7 +5,7 @@ using ProcessLogger;
 /** A very early prototype to gather log the process run-times
 */
 
-var processes = ProcessLogger.ProcessLogger.RunningProcesses();
+var processes = ProcessLogger.ProcessTracker.RunningProcesses();
 for (int ctr = 0; ctr < 10; ++ctr)
 {
     foreach (var proc in processes)
