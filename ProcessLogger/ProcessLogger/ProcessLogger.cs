@@ -1,48 +1,49 @@
 
 using System.Diagnostics;
 
-namespace ProcessLogger { 
-/** Logs results from a single Process.
+namespace ProcessLogger
+{
+    /** Logs results from a single Process.
 Provides factory methods to generalize easily create an instance for the 
 whole system.()
 */
-public class ProcessLogger
-{
-
-    public static IEnumerable<ProcessLogger> RunningProcesses()
+    public class ProcessLogger
     {
-        PerformanceCounterCategory cat = new("Process");
-        List<ProcessLogger> result = new();
 
-        foreach (string name in cat.GetInstanceNames())
+        public static IEnumerable<ProcessLogger> RunningProcesses()
         {
-            result.Add(new ProcessLogger(name));
+            PerformanceCounterCategory cat = new("Process");
+            List<ProcessLogger> result = new();
+
+            foreach (string name in cat.GetInstanceNames())
+            {
+                result.Add(new ProcessLogger(name));
+            }
+            return result;
         }
-        return result;
-    }
 
-    public string Name { get; }
-    private PerformanceCounter Counter { get; }
-    private int ReadFailures;    
+        public string Name { get; }
+        private PerformanceCounter Counter { get; }
+        private int ReadFailures;
 
-    private ProcessLogger(string name)
-    {
-        this.Name = name;
-        this.Counter = new("Process", "% Processor Time", name, true);
-    }
-
-    public float GetProcessorTime()
-    {
-        float result = 0;          
-        try
+        private ProcessLogger(string name)
         {
-            result = Counter.NextValue();
+            this.Name = name;
+            this.Counter = new("Process", "% Processor Time", name, true);
         }
-        catch (InvalidOperationException)
+
+        public float GetProcessorTime()
         {
-            ReadFailures++;
+            float result = 0;
+            try
+            {
+                result = Counter.NextValue();
+            }
+            catch (InvalidOperationException)
+            {
+                ReadFailures++;
+            }
+            return result;
         }
-        return result;
     }
-}
 }

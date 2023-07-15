@@ -6,12 +6,13 @@ using ProcessLogger;
 */
 
 var processes = ProcessLogger.ProcessLogger.RunningProcesses();
-for(int ctr = 0; ctr < 10; ++ctr)
+for (int ctr = 0; ctr < 10; ++ctr)
 {
     foreach (var proc in processes)
     {
         float time = proc.GetProcessorTime();
-        if (time > 0){
+        if (time > 0)
+        {
             Console.WriteLine(proc.Name + " -- " + time);
         }
     }
