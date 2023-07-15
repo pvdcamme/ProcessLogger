@@ -1,16 +1,18 @@
-﻿using FileLog;
+﻿
 
 namespace ProcessLogger.Test
 {
+    using FileLog;
     public class FileLogTests
     {
+
 
         [Fact]
         public void CreateFromDocuments()
         {
             try
             {
-                FileLog.FileLog.InDocuments("test.txt");
+                FileLog.InDocuments("test.txt");
             }
             catch (Exception)
             {
@@ -18,6 +20,5 @@ namespace ProcessLogger.Test
 
             }
         }
-
     }
 }
