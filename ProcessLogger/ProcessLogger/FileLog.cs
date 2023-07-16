@@ -67,7 +67,7 @@ namespace FileLog
 
         public void AddEntry(string key, float val)
         {
-            using(StreamWriter output = new StreamWriter(SavePath,true))
+            using(StreamWriter output = new(SavePath,true))
             {
                 var entry = new LogEntry(key, val);
                 output.WriteLine(entry.ToString()); 
