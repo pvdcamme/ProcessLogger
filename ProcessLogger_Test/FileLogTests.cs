@@ -22,7 +22,7 @@ namespace ProcessLogger.Test
             }
         }
 
-        [Fact]  
+        [Fact]
         public void AddSingleEntry()
         {
             var logger = FileLog.InDocuments("test.txt");
