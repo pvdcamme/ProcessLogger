@@ -67,6 +67,34 @@ namespace ProcessLogger.Test
             }
             Assert.Equal(toAdd.Length, entryCount);
         }
-    }
 
+        [Fact]
+        public void AddMultipleKeys()
+        {
+            // Using multiple keys, values. Including repetition.
+            // Including some odd Floating point values.
+            string[] keys = { "test", "jos", "test", "balloon" , "test", "jos", "dfds", "ff"};
+             float[] val = { -1f, 23f, 34f, 12.3f, 34f, float.NaN, float.MinValue, float.MaxValue };
+
+            // Testing the test.
+            Assert.Equal(keys.Length, val.Length);
+
+            var logger = FileLog.InDocuments("test.txt");
+            logger.Reset();
+
+            for (int ctr = 0; ctr < keys.Length; ++ctr)
+            {
+                logger.AddEntry(keys[ctr], val[ctr]);
+            }
+
+            int savedCtr = 0;
+            foreach (var entry in logger.GetEntries())
+            {
+                Assert.Equal(keys[savedCtr], entry.Key);
+                Assert.Equal(val[savedCtr], entry.Value);
+
+                savedCtr++;
+            }
+        }
+    }
 }
