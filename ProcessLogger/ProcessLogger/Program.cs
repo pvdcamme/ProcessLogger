@@ -6,15 +6,17 @@ using ProcessLogger;
 */
 
 var processes = ProcessLogger.ProcessTracker.RunningProcesses();
-for (int ctr = 0; ctr < 10; ++ctr)
+var log  = FileLog.FileLog.InDocuments("logged_process.txt");
+while(true) 
 {
     foreach (var proc in processes)
     {
-        float time = proc.GetProcessorTime();
-        if (time > 0)
+        float procTime = proc.GetProcessorTime();
+        if (procTime > 0)
         {
-            Console.WriteLine(proc.Name + " -- " + time);
-        }
+            Console.WriteLine($"logging {proc.Name}");
+            log.AddEntry(proc.Name, procTime);
+        }        
     }
-    Thread.Sleep(1000);
-}
+    Thread.Sleep(10000);
+}    
