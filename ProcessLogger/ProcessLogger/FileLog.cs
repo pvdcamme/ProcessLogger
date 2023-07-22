@@ -67,11 +67,9 @@ namespace FileLog
 
         public void AddEntry(string key, float val)
         {
-            using(StreamWriter output = new(SavePath,true))
-            {
-                var entry = new LogEntry(key, val);
-                output.WriteLine(entry.ToString()); 
-            }
+            using StreamWriter output = new(SavePath, true);
+            LogEntry entry = new(key, val);
+            output.WriteLine(entry.ToString());
         }
 
         public IEnumerable<LogEntry> GetEntries()
@@ -88,7 +86,6 @@ namespace FileLog
                 }
             }
             return entries;
-
         }
     }
 }
