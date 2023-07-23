@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Drawing.Drawing2D;
 using ProcessLogger;
 
 
@@ -9,12 +10,12 @@ var processes = ProcessLogger.ProcessTracker.RunningProcesses();
 var log  = FileLog.FileLog.InDocuments("logged_process.txt");
 while(true) 
 {
+    Console.Write("write new logs");
     foreach (var proc in processes)
     {
         float procTime = proc.GetProcessorTime();
         if (procTime > 0)
         {
-            Console.WriteLine($"logging {proc.Name}");
             log.AddEntry(proc.Name, procTime);
         }        
     }
