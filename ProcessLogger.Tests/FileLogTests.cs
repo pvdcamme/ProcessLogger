@@ -1,13 +1,10 @@
 ﻿
 
-namespace ProcessLogger.Test
+namespace ProcessLogger.Tests.ProcessLogger_Test
 {
-    using FileLog;    
-
+    using FileLog;
     public class FileLogTests
     {
-
-
         [Fact]
         public void CreateFromDocuments()
         {
@@ -49,7 +46,7 @@ namespace ProcessLogger.Test
             logger.Reset();
             float[] toAdd = { 1f, 23f, 45f, 0f, -12f, 100000f };
             const string keyName = "test";
-            foreach(var entry in toAdd)
+            foreach (var entry in toAdd)
             {
                 logger.AddEntry(keyName, entry);
             }
@@ -73,8 +70,8 @@ namespace ProcessLogger.Test
         {
             // Using multiple keys, values. Including repetition.
             // Including some odd Floating point values.
-            string[] keys = { "test", "jos", "test", "balloon" , "test", "jos", "dfds", "ff"};
-             float[] val = { -1f, 23f, 34f, 12.3f, 34f, float.NaN, float.MinValue, float.MaxValue };
+            string[] keys = { "test", "jos", "test", "balloon", "test", "jos", "dfds", "ff" };
+            float[] val = { -1f, 23f, 34f, 12.3f, 34f, float.NaN, float.MinValue, float.MaxValue };
 
             // Testing the test.
             Assert.Equal(keys.Length, val.Length);

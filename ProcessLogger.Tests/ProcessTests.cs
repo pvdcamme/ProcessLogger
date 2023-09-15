@@ -1,4 +1,4 @@
-namespace ProcessLogger_Test
+namespace ProcessLogger.Tests.ProcessLogger_Test
 {
     using ProcessLogger;
 

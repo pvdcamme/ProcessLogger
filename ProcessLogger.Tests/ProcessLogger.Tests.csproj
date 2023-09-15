@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ProcessLogger\ProcessLogger\ProcessLogger.csproj">
+    <ProjectReference Include="..\ProcessLogger\ProcessLogger.csproj">
       <ReferenceOutputAssembly>True</ReferenceOutputAssembly>
     </ProjectReference>
   </ItemGroup>

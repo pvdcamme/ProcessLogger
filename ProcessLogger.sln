@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProcessLogger", "ProcessLogger", "{43D6A6A7-9D00-42F3-88F0-DB74068D3F3E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProcessLogger", "ProcessLogger\ProcessLogger\ProcessLogger.csproj", "{86104E93-E674-43EC-BA98-9B9CCCC524D6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProcessLogger", "ProcessLogger\ProcessLogger.csproj", "{86104E93-E674-43EC-BA98-9B9CCCC524D6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProcessLogger.Tests", "ProcessLogger.Tests\ProcessLogger.Tests.csproj", "{03DFF6AC-260C-4D51-B1EF-16F04F05F1D9}"
 	ProjectSection(ProjectDependencies) = postProject
