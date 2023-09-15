@@ -7,7 +7,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProcessLogger", "ProcessLog
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProcessLogger", "ProcessLogger\ProcessLogger\ProcessLogger.csproj", "{86104E93-E674-43EC-BA98-9B9CCCC524D6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcessLogger.Test", "ProcessLogger_Test\ProcessLogger.Test.csproj", "{03DFF6AC-260C-4D51-B1EF-16F04F05F1D9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProcessLogger.Tests", "ProcessLogger.Tests\ProcessLogger.Tests.csproj", "{03DFF6AC-260C-4D51-B1EF-16F04F05F1D9}"
+	ProjectSection(ProjectDependencies) = postProject
+		{86104E93-E674-43EC-BA98-9B9CCCC524D6} = {86104E93-E674-43EC-BA98-9B9CCCC524D6}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
