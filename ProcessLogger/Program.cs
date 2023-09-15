@@ -7,7 +7,7 @@ using ProcessLogger;
 */
 
 var processes = ProcessLogger.ProcessTracker.RunningProcesses();
-var log  = FileLog.FileLog.InDocuments("logged_process.txt");
+var log  = FileLog.FileLog.InUserDocuments("logged_process.txt");
 while(true) 
 {
     Console.Write("write new logs");

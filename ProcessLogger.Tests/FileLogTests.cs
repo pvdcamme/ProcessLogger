@@ -11,7 +11,7 @@ namespace ProcessLogger.Tests
             // Can we actually instantiatie a Logger.
             try
             {
-                var logger = FileLog.InDocuments("test.txt");
+                var logger = FileLog.InUserDocuments("test.txt");
                 logger.Reset();
             }
             catch (Exception)
@@ -25,7 +25,7 @@ namespace ProcessLogger.Tests
         public void AddSingleEntry()
         {
             // The most basic entry-test, just a single entry.
-            var logger = FileLog.InDocuments("test.txt");
+            var logger = FileLog.InUserDocuments("test.txt");
             logger.Reset();
             logger.AddEntry("test", 1f);
 
@@ -42,7 +42,7 @@ namespace ProcessLogger.Tests
         public void AddMultipleEntries()
         {
             // Slightly more complicated test. Allows to also verify the timestamps.
-            var logger = FileLog.InDocuments("test.txt");
+            var logger = FileLog.InUserDocuments("test.txt");
             logger.Reset();
             float[] toAdd = { 1f, 23f, 45f, 0f, -12f, 100000f };
             const string keyName = "test";
@@ -76,7 +76,7 @@ namespace ProcessLogger.Tests
             // Testing the test.
             Assert.Equal(keys.Length, val.Length);
 
-            var logger = FileLog.InDocuments("test.txt");
+            var logger = FileLog.InUserDocuments("test.txt");
             logger.Reset();
 
             for (int ctr = 0; ctr < keys.Length; ++ctr)

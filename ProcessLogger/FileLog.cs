@@ -9,6 +9,8 @@ using System.Reflection.PortableExecutable;
 
 namespace FileLog
 {
+    /** A single Logged value, as captured at a specific moment.
+     */
     public readonly struct LogEntry
     {
         public string Key { get; }
@@ -44,9 +46,11 @@ namespace FileLog
         }
     }
 
+    /** Persistenly saves/Restores Logentries.
+     */
     public class FileLog
     {
-        public static FileLog InDocuments(string Name)
+        public static FileLog InUserDocuments(string Name)
         {
             string docPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             string finalDest = Path.Combine(docPath, Name);
@@ -64,11 +68,15 @@ namespace FileLog
             File.Delete(SavePath);
         }
 
-
         public void AddEntry(string key, float val)
         {
-            using StreamWriter output = new(SavePath, true);
             LogEntry entry = new(key, val);
+            AddEntry(entry);
+        }
+
+        public void AddEntry(LogEntry entry)
+        {
+            using StreamWriter output = new(SavePath, true);
             output.WriteLine(entry.ToString());
         }
 
