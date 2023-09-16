@@ -82,18 +82,13 @@ namespace FileLog
 
         public IEnumerable<LogEntry> GetEntries()
         {
-            List<LogEntry> entries = new();
-
-            using(StreamReader reader = new(SavePath))
+            using StreamReader reader = new(SavePath);
+            string? line = reader.ReadLine();
+            while (line != null)
             {
-                string? line = reader.ReadLine();
-                while (line != null) 
-                {
-                    entries.Add(LogEntry.FromLine(line));
-                    line = reader.ReadLine();
-                }
+                yield return LogEntry.FromLine(line);
+                line = reader.ReadLine();
             }
-            return entries;
         }
     }
 }
