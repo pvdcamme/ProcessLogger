@@ -16,9 +16,10 @@ namespace ProcessLogger.Tests
             }
             catch (Exception)
             {
-                Assert.Fail("Can't create");
+                Assert.Fail("Can not create logger");
             }
         }
+           
 
         // The most basic entry-test, just a single entry.
         [Fact]
@@ -35,6 +36,38 @@ namespace ProcessLogger.Tests
 
             Assert.Equal("test", soleResult.Key);
             Assert.Equal(1f, soleResult.Value);
+        }
+
+        [Fact]
+        public void EmptyLogger()
+        {
+            var logger = FileLog.InUserDocuments("test.txt");
+            logger.Reset();
+            Assert.Empty(logger.GetEntries());            
+        }
+
+        [Fact]
+        public void MultipleCreations()
+        {
+            try
+            {
+                string sameFileName = "test.txt";
+                // 10x should be enough to check cleanup properly happens.
+                for (int ctr = 0; ctr < 10; ctr++)
+                {
+                    Console.WriteLine($"Beginning with ${ctr}");
+                    var logger = FileLog.InUserDocuments(sameFileName);
+                    logger.AddEntry("something", 1);
+                    logger.Reset();
+                }
+                var lastLogger = FileLog.InUserDocuments(sameFileName);
+                Assert.Empty(lastLogger.GetEntries());
+                lastLogger.Reset();
+            }
+            catch (Exception ex)
+            {                
+                Assert.Fail("Should not fail:" + ex);
+            }
         }
 
         // Slightly more complicated test. Allows to also verify the timestamps.

@@ -17,7 +17,7 @@ namespace FileLog
         public float Value { get; }
         public long When { get; }
 
-        public LogEntry(string key, float value, long when)
+        LogEntry(string key, float value, long when)
         {
             Key = key;
             Value = value;
@@ -46,7 +46,7 @@ namespace FileLog
         }
     }
 
-    /** Persistenly saves/Restores Logentries.
+    /** Persistenly saves/restores Logentries.
      */
     public class FileLog
     {
@@ -82,13 +82,17 @@ namespace FileLog
 
         public IEnumerable<LogEntry> GetEntries()
         {
-            using StreamReader reader = new(SavePath);
-            string? line = reader.ReadLine();
-            while (line != null)
+            if (File.Exists(SavePath))
             {
-                yield return LogEntry.FromLine(line);
-                line = reader.ReadLine();
+                using StreamReader reader = new(SavePath);
+                string? line = reader.ReadLine();
+                while (line != null)
+                {
+                    yield return LogEntry.FromLine(line);
+                    line = reader.ReadLine();
+                }
             }
+            // Empty is ok
         }
     }
 }
