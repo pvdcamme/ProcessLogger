@@ -8,7 +8,7 @@ namespace ProcessLogger.Tests
         // Basic instantiation of a Logger.
         [Fact]
         public void CreateFromDocuments()
-        {            
+        {
             try
             {
                 var logger = FileLog.InUserDocuments("test.txt");
@@ -23,7 +23,7 @@ namespace ProcessLogger.Tests
         // The most basic entry-test, just a single entry.
         [Fact]
         public void AddSingleEntry()
-        {            
+        {
             var logger = FileLog.InUserDocuments("test.txt");
             logger.Reset();
             logger.AddEntry("test", 1f);
@@ -40,7 +40,7 @@ namespace ProcessLogger.Tests
         // Slightly more complicated test. Allows to also verify the timestamps.
         [Fact]
         public void AddMultipleEntriesOfSameKey()
-        {            
+        {
             var logger = FileLog.InUserDocuments("test.txt");
             logger.Reset();
 
@@ -65,7 +65,7 @@ namespace ProcessLogger.Tests
             Assert.Equal(toAdd.Length, entryCount);
         }
 
-        // Do the odd floats also work?
+        // Do the odd floating point values also work?
         [Fact]
         public void AddOddFloatVals()
         {
@@ -78,11 +78,11 @@ namespace ProcessLogger.Tests
             {
                 logger.AddEntry(anyKey, odd);
             }
-            
+
             foreach (var (origVal, savedVal) in oddValues.Zip(logger.GetEntries()))
             {
                 Assert.Equal(origVal, savedVal.Value);
-            }            
+            }
         }
 
         // Using multiple keys, values. Including repetition.
