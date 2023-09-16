@@ -5,10 +5,10 @@ namespace ProcessLogger.Tests
     using FileLog;
     public class FileLogTests
     {
+        // Basic instantiation of a Logger.
         [Fact]
         public void CreateFromDocuments()
-        {
-            // Can we actually instantiatie a Logger.
+        {            
             try
             {
                 var logger = FileLog.InUserDocuments("test.txt");
@@ -17,14 +17,13 @@ namespace ProcessLogger.Tests
             catch (Exception)
             {
                 Assert.Fail("Can't create");
-
             }
         }
 
+        // The most basic entry-test, just a single entry.
         [Fact]
         public void AddSingleEntry()
-        {
-            // The most basic entry-test, just a single entry.
+        {            
             var logger = FileLog.InUserDocuments("test.txt");
             logger.Reset();
             logger.AddEntry("test", 1f);
@@ -38,12 +37,13 @@ namespace ProcessLogger.Tests
             Assert.Equal(1f, soleResult.Value);
         }
 
+        // Slightly more complicated test. Allows to also verify the timestamps.
         [Fact]
-        public void AddMultipleEntries()
-        {
-            // Slightly more complicated test. Allows to also verify the timestamps.
+        public void AddMultipleEntriesOfSameKey()
+        {            
             var logger = FileLog.InUserDocuments("test.txt");
             logger.Reset();
+
             float[] toAdd = { 1f, 23f, 45f, 0f, -12f, 100000f };
             const string keyName = "test";
             foreach (var entry in toAdd)
@@ -65,11 +65,30 @@ namespace ProcessLogger.Tests
             Assert.Equal(toAdd.Length, entryCount);
         }
 
+        // Do the odd floats also work?
+        [Fact]
+        public void AddOddFloatVals()
+        {
+            var logger = FileLog.InUserDocuments("test.txt");
+            logger.Reset();
+
+            string anyKey = "strange";
+            float[] oddValues = { float.NaN, float.NegativeInfinity, float.PositiveInfinity, float.MinValue, float.MaxValue };
+            foreach (float odd in oddValues)
+            {
+                logger.AddEntry(anyKey, odd);
+            }
+            
+            foreach (var (origVal, savedVal) in oddValues.Zip(logger.GetEntries()))
+            {
+                Assert.Equal(origVal, savedVal.Value);
+            }            
+        }
+
+        // Using multiple keys, values. Including repetition.
         [Fact]
         public void AddMultipleKeys()
         {
-            // Using multiple keys, values. Including repetition.
-            // Including some odd Floating point values.
             string[] keys = { "test", "jos", "test", "balloon", "test", "jos", "dfds", "ff" };
             float[] val = { -1f, 23f, 34f, 12.3f, 34f, float.NaN, float.MinValue, float.MaxValue };
 
