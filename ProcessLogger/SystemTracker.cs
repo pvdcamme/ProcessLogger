@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace ProcessLogger
 {
+    // Tracks all process of the whole system.
     public class SystemTracker
     {
         private readonly Dictionary<string, IProcessTracker> processes = new();
@@ -13,7 +14,6 @@ namespace ProcessLogger
         public IEnumerable<string> UnknownProcesses(IEnumerable<string> currentProcesses)
         {
             HashSet<string> unknown = new(currentProcesses);
-
             HashSet<string> current = new(currentProcesses);
             current.IntersectWith(processes.Keys);
 

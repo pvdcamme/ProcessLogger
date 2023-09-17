@@ -9,17 +9,20 @@ namespace ProcessLogger.Tests
     public class SystemTracketTests
     {
         [Fact]
-        public void Creating()
-        {
-            try
-            {
+        public void InitiallyEmptState()
+        {           
                 SystemTracker tracker = new();
-                Assert.Empty(tracker.GetTrackedProcesses());
-            }
-            catch (Exception)
-            {
-                Assert.Fail("Should be able to create an instance");
-            }
+                Assert.Empty(tracker.GetTrackedProcesses());            
+        }
+
+        [Fact]
+        public void FillingUpTheTracker()
+        {
+            string[] dummyProcesses = { "aaa", "asdf", "anotherTest" };
+
+            SystemTracker tracker = new();
+            var unknown = tracker.UnknownProcesses(dummyProcesses);
+            Assert.Equal(dummyProcesses, unknown);
         }
     }
 }
