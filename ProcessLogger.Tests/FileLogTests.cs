@@ -51,6 +51,7 @@ namespace ProcessLogger.Tests
             Assert.Empty(logger.GetEntries());            
         }
 
+        // Can the logger the reinstantied over-and-over?
         [Fact]
         public void MultipleCreations()
         {
@@ -94,6 +95,7 @@ namespace ProcessLogger.Tests
             long previousMoment = long.MinValue;
             foreach (var entry in logger.GetEntries())
             {
+                Assert.True(entryCount < toAdd.Length);
                 Assert.Equal(keyName, entry.Key);
                 Assert.Equal(toAdd[entryCount], entry.Value);
                 Assert.InRange(entry.When, previousMoment, long.MaxValue);
