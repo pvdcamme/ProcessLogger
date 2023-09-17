@@ -4,6 +4,7 @@ namespace ProcessLogger.Tests
 
     public class ProcessTests
     {
+        // At least some processes should be running.
         [Fact]
         public void ExpectsSomeProcesses()
         {
@@ -13,11 +14,12 @@ namespace ProcessLogger.Tests
 
 
         [Fact]
-        public void CheckHasNextValues()
+        public void HasProcessTime()
         {
-            foreach (ProcessTracker aLogger in ProcessTracker.RunningProcesses())
+            foreach (var aLogger in ProcessTracker.RunningProcesses())
             {
                 Assert.True(aLogger.GetProcessorTime() >= 0, "Postive CPU time expexted");
+                Assert.NotEmpty(aLogger.Name);
             }
         }
     }

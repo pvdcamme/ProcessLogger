@@ -6,10 +6,10 @@ namespace ProcessLogger
     // Logs results from a single Process.
     // Provides factory methods to generalize easily create an instance for the 
     // whole system.
-    public class ProcessTracker
+    public class ProcessTracker : IProcessTracker
     {
 
-        public static IEnumerable<ProcessTracker> RunningProcesses()
+        public static IEnumerable<IProcessTracker> RunningProcesses()
         {
             PerformanceCounterCategory cat = new("Process");
             List<ProcessTracker> result = new();
