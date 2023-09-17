@@ -3,8 +3,10 @@
 namespace ProcessLogger.Tests
 {
     using FileLog;
+
     public class FileLogTests
     {
+
         // Basic instantiation of a Logger.
         [Fact]
         public void CreateFromDocuments()
@@ -36,6 +38,9 @@ namespace ProcessLogger.Tests
 
             Assert.Equal("test", soleResult.Key);
             Assert.Equal(1f, soleResult.Value);
+            Assert.Contains(soleResult.Key, logger.GetKeys());
+            Assert.Single(logger.GetEntries());
+            Assert.Single(logger.GetKeys());
         }
 
         [Fact]
@@ -61,8 +66,9 @@ namespace ProcessLogger.Tests
                     logger.Reset();
                 }
                 var lastLogger = FileLog.InUserDocuments(sameFileName);
+                // Also empty when not yet resetted?
                 Assert.Empty(lastLogger.GetEntries());
-                lastLogger.Reset();
+                lastLogger.Reset(); 
             }
             catch (Exception ex)
             {                

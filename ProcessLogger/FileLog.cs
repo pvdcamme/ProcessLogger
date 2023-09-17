@@ -80,6 +80,16 @@ namespace FileLog
             output.WriteLine(entry.ToString());
         }
 
+        public IEnumerable<String> GetKeys()
+        {
+            HashSet<String> keys = new();
+            foreach(var Entry in GetEntries())
+            {
+                keys.Add(Entry.Key);
+            }
+            return keys;
+        }
+
         public IEnumerable<LogEntry> GetEntries()
         {
             if (File.Exists(SavePath))
