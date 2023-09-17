@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ProcessLogger.Tests
 {
-    public class SystemTracketTests
+    public class SystemTrackerTests
     {
         [Fact]
         public void InitiallyEmptState()
