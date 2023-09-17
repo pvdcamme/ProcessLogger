@@ -150,6 +150,7 @@ namespace ProcessLogger.Tests
 
                 savedCtr++;
             }
+            Assert.Equal(new HashSet<string>(keys), new HashSet<string>(logger.GetKeys()));
         }
     }
 }
