@@ -3,10 +3,9 @@ using System.Diagnostics;
 
 namespace ProcessLogger
 {
-    /** Logs results from a single Process.
-Provides factory methods to generalize easily create an instance for the 
-whole system.()
-*/
+    // Logs results from a single Process.
+    // Provides factory methods to generalize easily create an instance for the 
+    // whole system.
     public class ProcessTracker
     {
 

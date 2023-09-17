@@ -9,8 +9,7 @@ using System.Reflection.PortableExecutable;
 
 namespace FileLog
 {
-    /** A single Logged value, as captured at a specific moment.
-     */
+    // A single Logged value, as captured at a specific moment.    
     public readonly struct LogEntry
     {
         public string Key { get; }
@@ -46,8 +45,7 @@ namespace FileLog
         }
     }
 
-    /** Persistenly saves/restores Logentries.
-     */
+    // Persistenly saves/restores Logentries.
     public class FileLog
     {
         public static FileLog InUserDocuments(string Name)
