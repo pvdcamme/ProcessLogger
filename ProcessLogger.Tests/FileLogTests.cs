@@ -103,6 +103,7 @@ namespace ProcessLogger.Tests
                 previousMoment = entry.When;
                 entryCount++;
             }
+            // Seen them all.
             Assert.Equal(toAdd.Length, entryCount);
         }
 

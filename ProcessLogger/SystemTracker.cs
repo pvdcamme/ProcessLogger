@@ -1,6 +1,6 @@
 ﻿namespace ProcessLogger
 {
-    // Tracks all processes of the whole system.
+    // Tracks processes of the whole system.
     public class SystemTracker
     {
         private readonly Dictionary<string, IProcessTracker> processes = new();
@@ -13,7 +13,7 @@
             this.trackerFactory = trackerFactory;
         }
 
-        public IEnumerable<string> UnknownProcesses(IEnumerable<string> currentProcesses)
+        public IEnumerable<string> MergeUnknownProcesses(IEnumerable<string> currentProcesses)
         {
             HashSet<string> unknown = new(currentProcesses);
             HashSet<string> current = new(currentProcesses);

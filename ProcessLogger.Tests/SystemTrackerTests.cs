@@ -37,7 +37,7 @@
             string[] dummyProcesses = { "aaa", "asdf", "anotherTest" };
 
             SystemTracker tracker = new(dummyFactory);
-            var unknown = tracker.UnknownProcesses(dummyProcesses);
+            var unknown = tracker.MergeUnknownProcesses(dummyProcesses);
             Assert.Equal(dummyProcesses, unknown);
         }
 
@@ -48,8 +48,8 @@
             string[] nextProcesseses = { "bbb", "the full test", "anotherTest" };
 
             SystemTracker tracker = new(dummyFactory);
-            tracker.UnknownProcesses(initialProcesses);
-            var finalList = tracker.UnknownProcesses(nextProcesseses);
+            tracker.MergeUnknownProcesses(initialProcesses);
+            var finalList = tracker.MergeUnknownProcesses(nextProcesseses);
 
             Assert.Contains("bbb", finalList);
             Assert.Contains("the full test", finalList);
