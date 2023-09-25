@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ProcessLogger.Tests
+﻿namespace ProcessLogger.Tests
 {
     public class SystemTrackerTests
     {

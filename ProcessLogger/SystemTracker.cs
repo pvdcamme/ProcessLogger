@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ProcessLogger
+﻿namespace ProcessLogger
 {
     // Tracks all processes of the whole system.
     public class SystemTracker
     {
         private readonly Dictionary<string, IProcessTracker> processes = new();
-        private Func<string, IProcessTracker> trackerFactory;
+        private readonly Func<string, IProcessTracker> trackerFactory;
 
         // A lower coupling approach, mostly useful for testing purposes.
         // Initilizers can be added as more functionality is implemented.
@@ -32,7 +26,7 @@ namespace ProcessLogger
 
             foreach (string notYetSeen in unknown)
             {
-                processes.Add(notYetSeen, new ProcessTracker(notYetSeen));
+                processes.Add(notYetSeen, trackerFactory(notYetSeen));
             }
 
             return unknown;
