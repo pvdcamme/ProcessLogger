@@ -6,10 +6,18 @@ using System.Threading.Tasks;
 
 namespace ProcessLogger
 {
-    // Tracks all process of the whole system.
+    // Tracks all processes of the whole system.
     public class SystemTracker
     {
         private readonly Dictionary<string, IProcessTracker> processes = new();
+        private Func<string, IProcessTracker> trackerFactory;
+
+        // A lower coupling approach, mostly useful for testing purposes.
+        // Initilizers can be added as more functionality is implemented.
+        public SystemTracker(Func<string, IProcessTracker> trackerFactory)
+        {
+            this.trackerFactory = trackerFactory;
+        }
 
         public IEnumerable<string> UnknownProcesses(IEnumerable<string> currentProcesses)
         {
@@ -20,6 +28,11 @@ namespace ProcessLogger
             foreach (string alreadySeen in current)
             {
                 unknown.Remove(alreadySeen);
+            }
+
+            foreach (string notYetSeen in unknown)
+            {
+                processes.Add(notYetSeen, new ProcessTracker(notYetSeen));
             }
 
             return unknown;

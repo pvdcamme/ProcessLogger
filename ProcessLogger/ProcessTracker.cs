@@ -25,7 +25,7 @@ namespace ProcessLogger
         private PerformanceCounter Counter { get; }
         private int ReadFailures;
 
-        private ProcessTracker(string name)
+        public ProcessTracker(string name)
         {
             this.Name = name;
             this.Counter = new("Process", "% Processor Time", name, true);
