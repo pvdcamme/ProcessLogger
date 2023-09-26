@@ -5,6 +5,8 @@
         // The most simple implementation of a ProcessTracker.
         class DummyTracker : IProcessTracker
         {
+            // For later testing, a dummy always returns the same time
+            public static readonly float PROCESSOR_TIME = 34f;
             public string Name { get; }
             public DummyTracker(string name)
             {
@@ -13,7 +15,7 @@
 
             float IProcessTracker.GetProcessorTime()
             {
-                return 0;
+                return PROCESSOR_TIME;
             }
 
             bool IProcessTracker.IsFailing()
@@ -39,6 +41,7 @@
             SystemTracker tracker = new(dummyFactory);
             var unknown = tracker.MergeUnknownProcesses(dummyProcesses);
             Assert.Equal(dummyProcesses, unknown);
+            Assert.Equal(dummyProcesses.Length, tracker.GetTrackedProcesses().Count()); 
         }
 
         [Fact]
@@ -51,9 +54,27 @@
             tracker.MergeUnknownProcesses(initialProcesses);
             var finalList = tracker.MergeUnknownProcesses(nextProcesseses);
 
+            //Manually counted from above lists.
             Assert.Contains("bbb", finalList);
             Assert.Contains("the full test", finalList);
             Assert.Equal(2, finalList.Count());
+            Assert.Equal(5, tracker.GetTrackedProcesses().Count());
+            
+            // Count should stay the same even after repeated requests.
+            Assert.Equal(5, tracker.GetTrackedProcesses().Count());
+        }
+
+        [Fact]
+        public void CheckProcessorTime()
+        {
+            string[] initialProcesses = { "aaa", "asdf", "anotherTest" };
+            SystemTracker tracker = new(dummyFactory);
+            tracker.MergeUnknownProcesses(initialProcesses);
+
+            foreach(var (_, ProcessorTime) in tracker.GetTrackedProcesses())
+            {
+                Assert.Equal(DummyTracker.PROCESSOR_TIME, ProcessorTime);
+            }
         }
     }
 }
