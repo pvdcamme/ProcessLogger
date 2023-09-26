@@ -21,7 +21,7 @@ namespace ProcessLogger.Tests
                 Assert.Fail("Can not create logger");
             }
         }
-           
+
 
         // The most basic entry-test, just a single entry.
         [Fact]
@@ -48,7 +48,7 @@ namespace ProcessLogger.Tests
         {
             var logger = FileLog.InUserDocuments("test.txt");
             logger.Reset();
-            Assert.Empty(logger.GetEntries());            
+            Assert.Empty(logger.GetEntries());
         }
 
         // Can the logger the reinstantied over-and-over?
@@ -69,10 +69,10 @@ namespace ProcessLogger.Tests
                 var lastLogger = FileLog.InUserDocuments(sameFileName);
                 // Also empty when not yet resetted?
                 Assert.Empty(lastLogger.GetEntries());
-                lastLogger.Reset(); 
+                lastLogger.Reset();
             }
             catch (Exception ex)
-            {                
+            {
                 Assert.Fail("Should not fail:" + ex);
             }
         }

@@ -28,9 +28,9 @@
 
         [Fact]
         public void InitiallyEmptState()
-        {           
-                SystemTracker tracker = new(dummyFactory);
-                Assert.Empty(tracker.GetTrackedProcesses());            
+        {
+            SystemTracker tracker = new(dummyFactory);
+            Assert.Empty(tracker.GetTrackedProcesses());
         }
 
         [Fact]
@@ -41,7 +41,7 @@
             SystemTracker tracker = new(dummyFactory);
             var unknown = tracker.MergeUnknownProcesses(dummyProcesses);
             Assert.Equal(dummyProcesses, unknown);
-            Assert.Equal(dummyProcesses.Length, tracker.GetTrackedProcesses().Count()); 
+            Assert.Equal(dummyProcesses.Length, tracker.GetTrackedProcesses().Count());
         }
 
         [Fact]
@@ -59,7 +59,7 @@
             Assert.Contains("the full test", finalList);
             Assert.Equal(2, finalList.Count());
             Assert.Equal(5, tracker.GetTrackedProcesses().Count());
-            
+
             // Count should stay the same even after repeated requests.
             Assert.Equal(5, tracker.GetTrackedProcesses().Count());
         }
@@ -71,7 +71,7 @@
             SystemTracker tracker = new(dummyFactory);
             tracker.MergeUnknownProcesses(initialProcesses);
 
-            foreach(var (_, ProcessorTime) in tracker.GetTrackedProcesses())
+            foreach (var (_, ProcessorTime) in tracker.GetTrackedProcesses())
             {
                 Assert.Equal(DummyTracker.PROCESSOR_TIME, ProcessorTime);
             }

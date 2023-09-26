@@ -32,10 +32,11 @@
             return unknown;
         }
 
-        public IEnumerable<(string,float)> GetTrackedProcesses()
+        public IEnumerable<(string, float)> GetTrackedProcesses()
         {
             HashSet<string> toRemove = new();
-            foreach (var process in processes) {
+            foreach (var process in processes)
+            {
                 string name = process.Key;
                 var counter = process.Value;
                 float cpuload = counter.GetProcessorTime();

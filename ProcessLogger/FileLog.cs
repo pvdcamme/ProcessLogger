@@ -1,13 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-using System.Reflection.PortableExecutable;
-
-namespace FileLog
+﻿namespace FileLog
 {
     // A single Logged value, as captured at a specific moment.    
     public readonly struct LogEntry
@@ -25,7 +16,7 @@ namespace FileLog
 
         public LogEntry(string key, float value)
         {
-            Key = key;  
+            Key = key;
             Value = value;
             When = DateTime.Now.Ticks;
         }
@@ -56,7 +47,7 @@ namespace FileLog
         }
         private string SavePath { get; }
 
-        public FileLog(string SavePath) 
+        public FileLog(string SavePath)
         {
             this.SavePath = SavePath;
         }
@@ -81,7 +72,7 @@ namespace FileLog
         public IEnumerable<String> GetKeys()
         {
             HashSet<String> keys = new();
-            foreach(var Entry in GetEntries())
+            foreach (var Entry in GetEntries())
             {
                 keys.Add(Entry.Key);
             }
