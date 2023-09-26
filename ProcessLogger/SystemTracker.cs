@@ -13,6 +13,8 @@
             this.trackerFactory = trackerFactory;
         }
 
+        // Updates the saved counters based on the currently known processes.
+        // Creates new counters when necessary.
         public IEnumerable<string> MergeUnknownProcesses(IEnumerable<string> currentProcesses)
         {
             HashSet<string> unknown = new(currentProcesses);
@@ -32,6 +34,7 @@
             return unknown;
         }
 
+        // Reports Processor load stats for the currently tracked processes.
         public IEnumerable<(string, float)> GetTrackedProcesses()
         {
             HashSet<string> toRemove = new();
