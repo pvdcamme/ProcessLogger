@@ -42,7 +42,7 @@
         }
 
         [Fact]
-        public void MergingTheTracker()
+        public void MergingTheTrackedProcesses()
         {
             string[] initialProcesses = { "aaa", "asdf", "anotherTest" };
             string[] nextProcesseses = { "bbb", "the full test", "anotherTest" };
