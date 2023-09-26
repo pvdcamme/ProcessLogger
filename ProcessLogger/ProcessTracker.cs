@@ -8,7 +8,6 @@ namespace ProcessLogger
     // whole system.
     public class ProcessTracker : IProcessTracker
     {
-
         public static IEnumerable<IProcessTracker> RunningProcesses()
         {
             PerformanceCounterCategory cat = new("Process");

@@ -1,6 +1,7 @@
 ﻿namespace ProcessLogger
 {
-    // Tracks processes of the whole system.
+    // Tracks processes of a whole system.
+    // Much decoupling from the actual Processtracker. This helps testing.
     public class SystemTracker
     {
         private readonly Dictionary<string, IProcessTracker> processes = new();

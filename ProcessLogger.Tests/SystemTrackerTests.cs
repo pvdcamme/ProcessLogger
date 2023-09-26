@@ -3,6 +3,7 @@
     public class SystemTrackerTests
     {
         // The most simple implementation of a ProcessTracker.
+        // Used for mocking
         class DummyTracker : IProcessTracker
         {
             // For later testing, a dummy always returns the same time
