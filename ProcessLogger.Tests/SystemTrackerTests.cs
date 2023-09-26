@@ -7,10 +7,14 @@
         {
             // For later testing, a dummy always returns the same time
             public static readonly float PROCESSOR_TIME = 34f;
+            public bool IsFailing { get; set; }
             public string Name { get; }
             public DummyTracker(string name)
             {
                 this.Name = name;
+
+                // Initially always good.
+                this.IsFailing = false;
             }
 
             float IProcessTracker.GetProcessorTime()
@@ -20,7 +24,7 @@
 
             bool IProcessTracker.IsFailing()
             {
-                return false;
+                return IsFailing;
             }
         }
 
@@ -74,6 +78,50 @@
             foreach (var (_, ProcessorTime) in tracker.GetTrackedProcesses())
             {
                 Assert.Equal(DummyTracker.PROCESSOR_TIME, ProcessorTime);
+            }
+        }
+
+        [Fact]
+        public void CheckFailureRemoval()
+        {
+            string[] initialProcesses = { "aaa", "asdf", "anotherTest" };
+            Dictionary<string, DummyTracker> dummies = new();
+
+            // Use side-effects to track the created mocks.
+            DummyTracker savedDummies(string name)
+            {
+                DummyTracker aDummy = new(name);
+                dummies.Add(name, aDummy);
+                return aDummy;
+            }
+
+            SystemTracker tracker = new((Func<string, DummyTracker>)savedDummies);
+            tracker.MergeUnknownProcesses(initialProcesses);
+
+
+            Random r = new();
+            foreach(var dummy in dummies.Values){
+                dummy.IsFailing = r.NextSingle() < 0.5;                
+            }
+
+            // A fails is reported once more.
+            int failCount = 0;
+            foreach(var (name, _) in tracker.GetTrackedProcesses())
+            {
+                var matchingMock = dummies.GetValueOrDefault(name);
+                Assert.True(matchingMock != null);
+                if (matchingMock.IsFailing)
+                {
+                    failCount++;
+                }
+            }
+            // Failed should be gone from the total
+            Assert.Equal(initialProcesses.Length - failCount, tracker.GetTrackedProcesses().Count());
+            foreach (var (name, _) in tracker.GetTrackedProcesses())
+            {
+                var matchingMock = dummies.GetValueOrDefault(name);
+                Assert.True(matchingMock != null);
+                Assert.False(matchingMock.IsFailing);
             }
         }
     }

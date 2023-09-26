@@ -44,8 +44,12 @@
                 {
                     toRemove.Add(name);
                 }
-
                 yield return (name, cpuload);
+            }
+
+            foreach(var failed in toRemove)
+            {
+                processes.Remove(failed);
             }
         }
     }
