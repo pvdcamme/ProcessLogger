@@ -97,26 +97,21 @@
 
             SystemTracker tracker = new((Func<string, DummyTracker>)savedDummies);
             tracker.MergeUnknownProcesses(initialProcesses);
-
-
+            
+            int expectFails = 0;
             Random r = new();
             foreach(var dummy in dummies.Values){
-                dummy.IsFailing = r.NextSingle() < 0.5;                
-            }
-
-            // A fails is reported once more.
-            int failCount = 0;
-            foreach(var (name, _) in tracker.GetTrackedProcesses())
-            {
-                var matchingMock = dummies.GetValueOrDefault(name);
-                Assert.True(matchingMock != null);
-                if (matchingMock.IsFailing)
+                dummy.IsFailing = r.NextSingle() < 0.5;
+                if (dummy.IsFailing)
                 {
-                    failCount++;
+                    expectFails++;
                 }
             }
-            // Failed should be gone from the total
-            Assert.Equal(initialProcesses.Length - failCount, tracker.GetTrackedProcesses().Count());
+            // A fails is reported once more.
+            Assert.Equal(initialProcesses.Length, tracker.GetTrackedProcesses().Count());
+
+            // Failed should now gone
+            Assert.Equal(initialProcesses.Length - expectFails, tracker.GetTrackedProcesses().Count());
             foreach (var (name, _) in tracker.GetTrackedProcesses())
             {
                 var matchingMock = dummies.GetValueOrDefault(name);
