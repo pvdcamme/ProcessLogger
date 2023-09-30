@@ -9,7 +9,13 @@ namespace ProcessLogger
         public static IEnumerable<String> ProcessNames()
         {
             PerformanceCounterCategory cat = new("Process");
-            return cat.GetInstanceNames();
+            foreach(var name in cat.GetInstanceNames())
+            {
+                if (!name.StartsWith("_Total"))
+                {
+                    yield return name;
+                }
+            }            
         }
 
         private readonly Dictionary<string, IProcessTracker> processes = new();

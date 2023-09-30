@@ -120,5 +120,10 @@
                 Assert.False(matchingMock.IsFailing);
             }
         }
+        [Fact]
+        public void checkFullProcessnames()
+        {
+            Assert.True(SystemTracker.ProcessNames().Count() > 5);
+        }
     }
 }
