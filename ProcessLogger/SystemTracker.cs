@@ -9,9 +9,11 @@ namespace ProcessLogger
         public static IEnumerable<String> ProcessNames()
         {
             PerformanceCounterCategory cat = new("Process");
+            const string forbidden = "_Total";
+            
             foreach(var name in cat.GetInstanceNames())
             {
-                if (!name.StartsWith("_Total"))
+                if (!name.StartsWith(forbidden))
                 {
                     yield return name;
                 }
