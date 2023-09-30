@@ -1,17 +1,20 @@
 ﻿// A very early prototype to gather log the process run-times
 
-var processes = ProcessLogger.ProcessTracker.RunningProcesses();
+
+using ProcessLogger;
+
 var log = FileLog.FileLog.InUserDocuments("logged_process.txt");
+
+SystemTracker tracker = new((string name) => { return new ProcessTracker(name); });
+
 while (true)
 {
-    Console.Write("write new logs");
-    foreach (var proc in processes)
+    tracker.MergeUnknownProcesses(SystemTracker.ProcessNames());
+
+    foreach ((string name, float load) in tracker.GetTrackedProcesses())
     {
-        float procTime = proc.GetProcessorTime();
-        if (procTime > 0)
-        {
-            log.AddEntry(proc.Name, procTime);
-        }
+        log.AddEntry(name, load);
+
     }
     Thread.Sleep(10000);
 }

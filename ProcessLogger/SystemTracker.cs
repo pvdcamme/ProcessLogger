@@ -1,9 +1,17 @@
-﻿namespace ProcessLogger
+﻿using System.Diagnostics;
+
+namespace ProcessLogger
 {
     // Tracks processes of a whole system.
-    // Much decoupling from the actual Processtracker. This helps testing.
+    // Much decoupling from the actual Processtracker to help testing.
     public class SystemTracker
     {
+        public static IEnumerable<String> ProcessNames()
+        {
+            PerformanceCounterCategory cat = new("Process");
+            return cat.GetInstanceNames();
+        }
+
         private readonly Dictionary<string, IProcessTracker> processes = new();
         private readonly Func<string, IProcessTracker> trackerFactory;
 
@@ -23,7 +31,7 @@
             current.IntersectWith(processes.Keys);
 
             foreach (string alreadySeen in current)
-            {
+            {                
                 unknown.Remove(alreadySeen);
             }
 
