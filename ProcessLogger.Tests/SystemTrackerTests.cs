@@ -121,9 +121,17 @@
             }
         }
         [Fact]
-        public void checkFullProcessnames()
+        public void CheckFullProcessnames()
         {
+            // 5 processes seems a reasonable minimum to expect by default.
             Assert.True(SystemTracker.ProcessNames().Count() > 5);
+        }
+
+        [Fact]
+        public void CheckSystemFrequency()
+        {
+            const float MHZ = 1e6f;
+            Assert.True(SystemTracker.GetSystemFrequency() > MHZ);
         }
     }
 }

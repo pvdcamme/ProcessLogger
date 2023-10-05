@@ -27,7 +27,14 @@ namespace ProcessLogger
         // Initilizers can be added as more functionality is implemented.
         public SystemTracker(Func<string, IProcessTracker> trackerFactory)
         {
-            this.trackerFactory = trackerFactory;
+            this.trackerFactory = trackerFactory;            
+        }
+
+        public static float GetSystemFrequency()
+        {
+            PerformanceCounter systemFrequency = new("Processor Information", "Processor Frequency", "_Total");
+            const float MHZ_TO_HZ = 1e6f;
+            return MHZ_TO_HZ * systemFrequency.NextValue();
         }
 
         // Updates the saved counters based on the currently known processes.
