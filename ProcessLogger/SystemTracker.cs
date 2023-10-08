@@ -60,9 +60,11 @@ namespace ProcessLogger
         }
 
         // Reports Processor load stats for the currently tracked processes.
+        // These stats are scaled for the current CPU speed
         public IEnumerable<(string, float)> GetTrackedProcesses()
         {
             HashSet<string> toRemove = new();
+            var currentSpeed = GetRelativeSpeed();
             foreach (var process in processes)
             {
                 string name = process.Key;
@@ -72,7 +74,7 @@ namespace ProcessLogger
                 {
                     toRemove.Add(name);
                 }
-                yield return (name, cpuload);
+                yield return (name, cpuload * currentSpeed);
             }
 
             foreach(var failed in toRemove)
