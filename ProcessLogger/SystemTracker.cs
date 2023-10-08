@@ -30,12 +30,11 @@ namespace ProcessLogger
             this.trackerFactory = trackerFactory;            
         }
 
-        public static float GetSystemFrequency()
+        public static float GetRelativeSpeed()
         {
-            PerformanceCounter maxsystemFrequency = new("Processor Information", "Processor Frequency", "_Total");
             PerformanceCounter actualPerformance = new("Processor Information", "% of Maximum Frequency", "_Total");
-            const float MHZ_TO_HZ = 1e6f;
-            return MHZ_TO_HZ * maxsystemFrequency.NextValue() * actualPerformance.NextValue();
+            const float PERC_TO_VAL = 1 / 100f;
+            return PERC_TO_VAL * actualPerformance.NextValue();
         }
 
 

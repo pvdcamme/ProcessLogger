@@ -128,10 +128,11 @@
         }
 
         [Fact]
-        public void CheckSystemFrequency()
+        public void CheckSystemSpeed()
         {
-            const float MHZ = 1e6f;
-            Assert.True(SystemTracker.GetSystemFrequency() > MHZ);
+            var currentSpeed = SystemTracker.GetRelativeSpeed();
+            // Test is doing something, speed can't thus be 0.
+            Assert.True(currentSpeed > 0);
         }
     }
 }
