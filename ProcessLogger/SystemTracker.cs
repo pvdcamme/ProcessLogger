@@ -32,10 +32,12 @@ namespace ProcessLogger
 
         public static float GetSystemFrequency()
         {
-            PerformanceCounter systemFrequency = new("Processor Information", "Processor Frequency", "_Total");
+            PerformanceCounter maxsystemFrequency = new("Processor Information", "Processor Frequency", "_Total");
+            PerformanceCounter actualPerformance = new("Processor Information", "% of Maximum Frequency", "_Total");
             const float MHZ_TO_HZ = 1e6f;
-            return MHZ_TO_HZ * systemFrequency.NextValue();
+            return MHZ_TO_HZ * maxsystemFrequency.NextValue() * actualPerformance.NextValue();
         }
+
 
         // Updates the saved counters based on the currently known processes.
         // Creates new counters when necessary.
