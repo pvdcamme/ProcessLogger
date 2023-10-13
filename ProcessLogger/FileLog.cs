@@ -36,6 +36,24 @@
         }
     }
 
+    public class ReverseFileReader
+    {
+        private readonly string _name;
+        private readonly FileStream _stream;
+
+        public ReverseFileReader(string name)
+        {
+            this._name = name;
+            this._stream = new(_name, FileMode.Open, FileAccess.Read); 
+        }
+
+        public long GetFileSize()
+        {
+            return _stream.Length;
+        }
+    }
+    
+
     // Persistenly saves/restores Logentries.
     public class FileLog
     {

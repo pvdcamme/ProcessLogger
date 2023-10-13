@@ -6,7 +6,6 @@ namespace ProcessLogger.Tests
 
     public class FileLogTests
     {
-
         // Basic instantiation of a Logger.
         [Fact]
         public void CreateFromDocuments()
@@ -156,4 +155,14 @@ namespace ProcessLogger.Tests
             Assert.Equal(new HashSet<string>(keys), new HashSet<string>(logger.GetKeys()));
         }
     }
+    public class ReverseFileTests
+    {
+        [Fact]
+        public void CheckConstuctor()
+        {
+            ReverseFileReader reader = new("test.txt");
+        }
+    }
+
+
 }
