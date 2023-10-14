@@ -39,27 +39,40 @@
     public class ReverseFileReader: IDisposable
     {
         private readonly string _name;
-        private readonly FileStream _stream;
+        private readonly List<string> _lines;
+        private int _offset;
 
         public ReverseFileReader(string name)
         {
             this._name = name;
-            this._stream = new(_name, FileMode.Open, FileAccess.Read); 
+
+            this._lines = new List<string>();
+
+        
+            using StreamReader _stream = new(_name);
+            while(!_stream.EndOfStream)
+            {
+                var line = _stream.ReadLine();
+                _lines.Add(line);
+            }
+            _offset = _lines.Count;
         }
 
         public void Dispose()
         {
-            ((IDisposable)_stream).Dispose();
-        }
-
-        public long GetFileSize()
-        {
-            return _stream.Length;
+            // Not required at the moment.
         }
 
         public string ReadLine()
         {
-            throw new NotImplementedException();
+            _offset--;
+            if(_offset >= 0)
+            {
+                return _lines[_offset];
+            } else
+            {
+                return "";
+            }            
         }
     }
     
