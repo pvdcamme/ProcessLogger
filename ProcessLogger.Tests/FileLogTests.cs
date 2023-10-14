@@ -184,6 +184,28 @@ namespace ProcessLogger.Tests
             }
             File.Delete(tmpFileName);
         }
+
+        [Fact]
+        public void CheckMultipleLines()
+        {
+            string[] testLines = { "Test", "another test", "more testing", "and a last line" };
+            string tmpFileName = Path.GetTempFileName();
+            {
+                using StreamWriter fillUp = new(tmpFileName);
+                foreach(var line in testLines)
+                {
+                    fillUp.WriteLine(line);
+                }
+            }
+            {
+                using ReverseFileReader aReader = new( tmpFileName);
+                foreach (var line in testLines.Reverse())
+                {
+                    Assert.Equal(line, aReader.ReadLine());
+                }
+
+            }
+        }
     }
 
 
