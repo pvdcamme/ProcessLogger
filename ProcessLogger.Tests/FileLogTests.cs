@@ -2,7 +2,7 @@
 
 namespace ProcessLogger.Tests
 {
-    using FileLog;
+    using FileLog;    
 
     public class FileLogTests
     {
@@ -160,7 +160,20 @@ namespace ProcessLogger.Tests
         [Fact]
         public void CheckConstuctor()
         {
-            ReverseFileReader reader = new("test.txt");
+            string tmpFileName = Path.GetTempFileName();
+            {
+                using ReverseFileReader  aReader = new (tmpFileName);
+            }
+            
+            File.Delete(tmpFileName);
+        }
+
+        [Fact]
+        public void CheckSingleLine()
+        {
+            string tmpFileName = Path.GetTempFileName();
+
+            File.Delete(tmpFileName);
         }
     }
 

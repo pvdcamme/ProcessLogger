@@ -36,7 +36,7 @@
         }
     }
 
-    public class ReverseFileReader
+    public class ReverseFileReader: IDisposable
     {
         private readonly string _name;
         private readonly FileStream _stream;
@@ -45,6 +45,11 @@
         {
             this._name = name;
             this._stream = new(_name, FileMode.Open, FileAccess.Read); 
+        }
+
+        public void Dispose()
+        {
+            ((IDisposable)_stream).Dispose();
         }
 
         public long GetFileSize()
