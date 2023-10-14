@@ -46,14 +46,7 @@
         {
             _name = name;
             _lines = new List<string>();
-        
-            using StreamReader _stream = new(_name);
-            string? line;
-            while(null != (line  = _stream.ReadLine()))
-            {
-                _lines.Add(line);
-            }
-            _read_offset = 0;
+                               
         }
 
         public void Dispose()
@@ -61,15 +54,32 @@
             // Not required at the moment.
         }
 
+        private void fillBuffer()
+        {
+            using StreamReader _stream = new(_name);
+            string? line;
+            while (null != (line = _stream.ReadLine()))
+            {
+                _lines.Add(line);
+            }
+            _read_offset = 0;
+        }
+
         public string ReadLine()
         {
+            if(_lines.Count == 0)
+            {
+                fillBuffer();
+            }
             if (_lines.Count > 0)
             {
                 var res = _lines.Last();
                 _lines.RemoveAt(_lines.Count - 1); 
                 return res;
-            }
-            return "";
+            } else
+            {
+                return "";
+            }            
         }
     }
     
