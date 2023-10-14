@@ -44,15 +44,13 @@
 
         public ReverseFileReader(string name)
         {
-            this._name = name;
-
-            this._lines = new List<string>();
-
+            _name = name;
+            _lines = new List<string>();
         
             using StreamReader _stream = new(_name);
-            while(!_stream.EndOfStream)
+            string? line;
+            while(null != (line  = _stream.ReadLine()))
             {
-                var line = _stream.ReadLine();
                 _lines.Add(line);
             }
             _offset = _lines.Count;
