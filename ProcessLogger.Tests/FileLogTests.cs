@@ -162,9 +162,9 @@ namespace ProcessLogger.Tests
         {
             string tmpFileName = Path.GetTempFileName();
             {
-                using ReverseFileReader  aReader = new (tmpFileName);
+                using ReverseFileReader aReader = new(tmpFileName);
             }
-            
+
             File.Delete(tmpFileName);
         }
 
@@ -192,21 +192,37 @@ namespace ProcessLogger.Tests
             string tmpFileName = Path.GetTempFileName();
             {
                 using StreamWriter fillUp = new(tmpFileName);
-                foreach(var line in testLines)
+                foreach (var line in testLines)
                 {
                     fillUp.WriteLine(line);
                 }
             }
             {
-                using ReverseFileReader aReader = new( tmpFileName);
+                using ReverseFileReader aReader = new(tmpFileName);
                 foreach (var line in testLines.Reverse())
                 {
                     Assert.Equal(line, aReader.ReadLine());
                 }
+            }
+            File.Delete(tmpFileName);
+        }
+        [Fact]
+        public void CheckManyLines()
+        {
+            string[] testLines = { "Test", "another test", "more testing", "and a last line" };
+            string tmpFileName = Path.GetTempFileName();
+            {
+                using StreamWriter fillUp = new(tmpFileName);
+                for (int ctr = 0; ctr < 1_000_000; ++ctr)
+                {
+                    fillUp.WriteLine($"ctr is {ctr}");
+                }
+            }
+            {
+                using ReverseFileReader aReader = new(tmpFileName);
 
             }
+            File.Delete(tmpFileName);
         }
     }
-
-
 }

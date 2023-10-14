@@ -40,7 +40,7 @@
     {
         private readonly string _name;
         private readonly List<string> _lines;
-        private int _offset;
+        private long _read_offset;
 
         public ReverseFileReader(string name)
         {
@@ -53,7 +53,7 @@
             {
                 _lines.Add(line);
             }
-            _offset = _lines.Count;
+            _read_offset = 0;
         }
 
         public void Dispose()
@@ -63,14 +63,13 @@
 
         public string ReadLine()
         {
-            _offset--;
-            if(_offset >= 0)
+            if (_lines.Count > 0)
             {
-                return _lines[_offset];
-            } else
-            {
-                return "";
-            }            
+                var res = _lines.Last();
+                _lines.RemoveAt(_lines.Count - 1); 
+                return res;
+            }
+            return "";
         }
     }
     
