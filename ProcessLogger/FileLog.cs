@@ -56,6 +56,11 @@
         {
             return _stream.Length;
         }
+
+        public string ReadLine()
+        {
+            throw new NotImplementedException();
+        }
     }
     
 

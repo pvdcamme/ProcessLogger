@@ -158,7 +158,7 @@ namespace ProcessLogger.Tests
     public class ReverseFileTests
     {
         [Fact]
-        public void CheckConstuctor()
+        public void CheckConstuctorAndcleanup()
         {
             string tmpFileName = Path.GetTempFileName();
             {
@@ -171,8 +171,17 @@ namespace ProcessLogger.Tests
         [Fact]
         public void CheckSingleLine()
         {
+            const string testTxt = "test";
             string tmpFileName = Path.GetTempFileName();
-
+            {
+                using StreamWriter fillUp = new(tmpFileName);
+                fillUp.WriteLine(testTxt);
+            }
+            {
+                using ReverseFileReader aReader = new(tmpFileName);
+                string lastLine = aReader.ReadLine(); ;
+                Assert.Equal(testTxt, lastLine);
+            }
             File.Delete(tmpFileName);
         }
     }
