@@ -221,14 +221,12 @@ namespace ProcessLogger.Tests
             }
             {
                 using ReverseFileReader aReader = new(tmpFileName);
-                string res;
-                int actuallyRead = 0;
-                while((res = aReader.ReadLine()).Length > 0){
-                    Console.WriteLine(res);
-                    actuallyRead++;
+                for(int ctr = expectedLines - 1; ctr >= 0; --ctr)
+                {
+                    var res  = aReader.ReadLine();
+                    Assert.Equal($"ctr is {ctr}", res); 
                 }
-                Assert.Equal(expectedLines, actuallyRead);
-
+                Assert.Equal("", aReader.ReadLine());
             }
             File.Delete(tmpFileName);
         }

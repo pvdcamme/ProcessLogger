@@ -46,7 +46,7 @@ namespace FileLog
         private readonly string _name;
         private readonly List<string> _lines;
         private long _read_offset;
-        private readonly int _bufferSize = 1024 * 128;
+        private readonly int _bufferSize = 1024 * 32;
 
         public ReverseFileReader(string name)
         {
@@ -107,7 +107,7 @@ namespace FileLog
             }
             else
             {
-                _read_offset -= totalRead - lastLineCollection;
+                _read_offset -= totalRead - (lastLineCollection + newLineSplt.Length);
             }
             _lines.Reverse();
         }
