@@ -68,7 +68,7 @@ namespace FileLog
             long toread = Math.Min(toFill.LongLength, endPosition);
             file.Position = endPosition - toread;
             file.ReadExactly(toFill, 0, (int) toread);
-            return (int)toread;
+            return (int)toread;       
         }
 
         private void FillBuffer()
@@ -80,27 +80,29 @@ namespace FileLog
 
             byte[] buffer = new byte[_bufferSize];
             int totalRead = CollectLastBuffer(_name,_read_offset, buffer);
-            
-            int lastLineCollection = totalRead - newLineSplt.Length;
-            for(int ctr=lastLineCollection; ctr >= 0; ctr--) 
+            bool atFileEnd = totalRead < _bufferSize;
+            byte[] reverseSearch = newLineSplt.Reverse().ToArray();
+
+            int lastLineCollection = totalRead - 1;
+            for(int ctr=lastLineCollection; ctr >= newLineSplt.Length; ctr--) 
             {                
-                bool hasFound = true;
-                for(int innerCtr= 0; innerCtr < newLineSplt.Length && hasFound; innerCtr++)
+                bool hasFound = ctr >= reverseSearch.Length;
+                for(int innerCtr= 0; innerCtr < reverseSearch.Length && hasFound; innerCtr++)
                 {
-                    hasFound = (newLineSplt[innerCtr] == buffer[ctr + innerCtr]) && hasFound;
+                    hasFound = (reverseSearch[innerCtr] == buffer[ctr - innerCtr]) && hasFound;
                 }
-                if (hasFound && (lastLineCollection - ctr) > newLineSplt.Length)
+                if (hasFound && (lastLineCollection - ctr) > reverseSearch.Length)
                 {
-                    int lineStart = ctr + newLineSplt.Length;
+                    int lineStart = ctr + 1;
                     var res = Encoding.UTF8.GetString(buffer, lineStart, lastLineCollection-lineStart);
                     _lines.Add(res);
                 }
                 if (hasFound)
                 {
-                    lastLineCollection = ctr;
+                    lastLineCollection = ctr - reverseSearch.Length + 1;
                 }
             }
-            if (totalRead < _bufferSize)
+            if (atFileEnd)
             {
                 var res = Encoding.UTF8.GetString(buffer, 0, lastLineCollection);
                 _lines.Add(res);
