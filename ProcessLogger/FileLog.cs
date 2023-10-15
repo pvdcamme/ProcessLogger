@@ -60,30 +60,29 @@ namespace FileLog
             // Not required at the moment.
         }
 
-        private static (bool, byte[]) CollectLastBuffer(string name, long startPosition, int maxSize)
+        private static int CollectLastBuffer(string name, long startPosition, byte[] toFill)
         {            
             using FileStream file = new(name, FileMode.Open);
-            int toread;
-            if(startPosition > (long)maxSize)
+            int toread = toFill.Length;
+            if(startPosition > toFill.LongLength)
             {
-                file.Position = startPosition - maxSize;
-                toread = maxSize;
+                file.Position = startPosition - toFill.Length ;
             }
             else
             {
                 toread = (int) startPosition;
             }
-            byte[] result = new byte[toread];
-            file.ReadExactly(result, 0, toread);
-            return ((startPosition < maxSize), result);
+            file.ReadExactly(toFill, 0, toread);
+            return toread;
         }
 
         private void FillBuffer()
         {
-            (bool lastRead, byte[] buffer) = CollectLastBuffer(_name,_read_offset, _bufferSize);
+            byte[] buffer = new byte[_bufferSize];
+            int lastRead = CollectLastBuffer(_name,_read_offset, buffer);
             byte[] toSearch = Encoding.UTF8.GetBytes("\r\n");
             List<byte> partialLine = new();
-            for(int ctr=buffer.Length-toSearch.Length; ctr >= 0; ctr--) 
+            for(int ctr=lastRead-toSearch.Length; ctr >= 0; ctr--) 
             {
                 partialLine.Insert(0, buffer[ctr]);
                 bool hasFound = true;
@@ -102,7 +101,7 @@ namespace FileLog
                     partialLine.Clear();
                 }
             }
-            if (lastRead)
+            if (lastRead < _bufferSize)
             {
                 string res = Encoding.UTF8.GetString(partialLine.ToArray());
                 _lines.Add(res);
