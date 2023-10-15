@@ -42,7 +42,7 @@ namespace FileLog
 
     public class ReverseFileReader: IDisposable
     {
-        private readonly byte[] newLineSplt = Encoding.UTF8.GetBytes("\r\n");
+        private static readonly byte[] newLineSplt = Encoding.UTF8.GetBytes("\r\n");
         private readonly string _name;
         private readonly List<string> _lines;
         private long _read_offset;
@@ -51,7 +51,7 @@ namespace FileLog
         public ReverseFileReader(string name)
         {
             _name = name;
-            _lines = new List<string>();
+            _lines = new();
 
             using FileStream _file = new(_name, FileMode.Open);
             _read_offset = _file.Length;
@@ -77,6 +77,7 @@ namespace FileLog
             {
                 return;
             }
+
             byte[] buffer = new byte[_bufferSize];
             int totalRead = CollectLastBuffer(_name,_read_offset, buffer);
             
