@@ -1,4 +1,5 @@
 ﻿using System.Reflection.Metadata;
+using System.Runtime.ConstrainedExecution;
 using System.Text;
 
 namespace FileLog
@@ -41,6 +42,7 @@ namespace FileLog
 
     public class ReverseFileReader: IDisposable
     {
+        private readonly byte[] newLineSplt = Encoding.UTF8.GetBytes("\r\n");
         private readonly string _name;
         private readonly List<string> _lines;
         private long _read_offset;
@@ -71,43 +73,48 @@ namespace FileLog
 
         private void FillBuffer()
         {
-            byte[] buffer = new byte[_bufferSize];
-            int lastRead = CollectLastBuffer(_name,_read_offset, buffer);
-            byte[] toSearch = Encoding.UTF8.GetBytes("\r\n");
-            List<byte> partialLine = new();
-            for(int ctr=lastRead-toSearch.Length; ctr >= 0; ctr--) 
+            if(_read_offset == 0 )
             {
-                partialLine.Insert(0, buffer[ctr]);
+                return;
+            }
+            byte[] buffer = new byte[_bufferSize];
+            int totalRead = CollectLastBuffer(_name,_read_offset, buffer);
+            
+            int lastLineCollection = totalRead - newLineSplt.Length;
+            for(int ctr=lastLineCollection; ctr >= 0; ctr--) 
+            {                
                 bool hasFound = true;
-                for(int innerCtr= 0; innerCtr < toSearch.Length && hasFound; innerCtr++)
+                for(int innerCtr= 0; innerCtr < newLineSplt.Length && hasFound; innerCtr++)
                 {
-                    hasFound = (toSearch[innerCtr] == buffer[ctr + innerCtr]) && hasFound;
+                    hasFound = (newLineSplt[innerCtr] == buffer[ctr + innerCtr]) && hasFound;
                 }
-                if (hasFound && partialLine.Count > toSearch.Length)
+                if (hasFound && (lastLineCollection - ctr) > newLineSplt.Length)
                 {
-                    partialLine.RemoveRange(0, toSearch.Length);
-                    string res = Encoding.UTF8.GetString(partialLine.ToArray());
+                    int lineStart = ctr + newLineSplt.Length;
+                    var res = Encoding.UTF8.GetString(buffer, lineStart, lastLineCollection-lineStart);
                     _lines.Add(res);
                 }
                 if (hasFound)
                 {
-                    partialLine.Clear();
+                    lastLineCollection = ctr;
                 }
             }
-            if (lastRead < _bufferSize)
+            if (totalRead < _bufferSize)
             {
-                string res = Encoding.UTF8.GetString(partialLine.ToArray());
+                var res = Encoding.UTF8.GetString(buffer, 0, lastLineCollection);
                 _lines.Add(res);
-            } else
+                _read_offset = 0;
+            }
+            else
             {
-                _read_offset -= (buffer.Length - partialLine.Count);
+                _read_offset -= totalRead - lastLineCollection;
             }
             _lines.Reverse();
         }
 
         public string ReadLine()
         {
-            if(_lines.Count == 0)
+            if (_lines.Count == 0)
             {
                 FillBuffer();
             }

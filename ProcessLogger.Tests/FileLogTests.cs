@@ -188,7 +188,7 @@ namespace ProcessLogger.Tests
         [Fact]
         public void CheckMultipleLines()
         {
-            string[] testLines = { "Test", "another test", "more testing", "and a last line" };
+            string[] testLines = { "Test", "another test", "more testing", "peninultimute line", "and a last line" };
             string tmpFileName = Path.GetTempFileName();
             {
                 using StreamWriter fillUp = new(tmpFileName);
@@ -201,7 +201,8 @@ namespace ProcessLogger.Tests
                 using ReverseFileReader aReader = new(tmpFileName);
                 foreach (var line in testLines.Reverse())
                 {
-                    Assert.Equal(line, aReader.ReadLine());
+                    var readLine = aReader.ReadLine();
+                    Assert.Equal(line, readLine);
                 }
             }
             File.Delete(tmpFileName);
@@ -209,17 +210,24 @@ namespace ProcessLogger.Tests
         [Fact]
         public void CheckManyLines()
         {
-            string[] testLines = { "Test", "another test", "more testing", "and a last line" };
+            const int expectedLines = 1_000_000;
             string tmpFileName = Path.GetTempFileName();
             {
                 using StreamWriter fillUp = new(tmpFileName);
-                for (int ctr = 0; ctr < 1_000_000; ++ctr)
+                for (int ctr = 0; ctr < expectedLines; ++ctr)
                 {
                     fillUp.WriteLine($"ctr is {ctr}");
                 }
             }
             {
                 using ReverseFileReader aReader = new(tmpFileName);
+                string res;
+                int actuallyRead = 0;
+                while((res = aReader.ReadLine()).Length > 0){
+                    Console.WriteLine(res);
+                    actuallyRead++;
+                }
+                Assert.Equal(expectedLines, actuallyRead);
 
             }
             File.Delete(tmpFileName);
