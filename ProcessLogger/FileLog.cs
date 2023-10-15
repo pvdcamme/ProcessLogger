@@ -60,20 +60,13 @@ namespace FileLog
             // Not required at the moment.
         }
 
-        private static int CollectLastBuffer(string name, long startPosition, byte[] toFill)
+        private static int CollectLastBuffer(string name, long endPosition, byte[] toFill)
         {            
             using FileStream file = new(name, FileMode.Open);
-            int toread = toFill.Length;
-            if(startPosition > toFill.LongLength)
-            {
-                file.Position = startPosition - toFill.Length ;
-            }
-            else
-            {
-                toread = (int) startPosition;
-            }
-            file.ReadExactly(toFill, 0, toread);
-            return toread;
+            long toread = Math.Min(toFill.LongLength, endPosition);
+            file.Position = endPosition - toread;
+            file.ReadExactly(toFill, 0, (int) toread);
+            return (int)toread;
         }
 
         private void FillBuffer()
