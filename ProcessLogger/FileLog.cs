@@ -73,12 +73,15 @@ namespace FileLog
 
         private static bool IsEndOfNewline(byte[] buffer, int offset)
         {
-            bool hasFound = offset > reverseSearch.Length;
-            for (int innerCtr = 0; innerCtr < reverseSearch.Length && hasFound; innerCtr++)
+            int innerCtr;
+            for (innerCtr = 0; innerCtr < reverseSearch.Length; innerCtr++)
             {
-                hasFound = reverseSearch[innerCtr] == buffer[offset - innerCtr];
+                if (reverseSearch[innerCtr] != buffer[offset - innerCtr])
+                {
+                    return false;
+                }
             }
-            return hasFound;
+            return innerCtr == reverseSearch.Length;
         }
 
         private void FillBuffer()
@@ -103,15 +106,16 @@ namespace FileLog
                 bool hasMoreContent = (lastLineCollection - ctr) > reverseSearch.Length;
                 if (hasMoreContent)
                 {
-                    int lineStart = ctr + 1;
+                    int lineStart = ctr + 1; // Don't need last char of newline
                     var res = Encoding.UTF8.GetString(buffer, lineStart, lastLineCollection - lineStart);
                     _lines.Add(res);
                 }
 
-                lastLineCollection = ctr - reverseSearch.Length + 1;
-                ctr = lastLineCollection - reverseSearch.Length;
                 
+                lastLineCollection = ctr - reverseSearch.Length + 1;
+                ctr = lastLineCollection - reverseSearch.Length;                
             }
+
             if (atFileEnd)
             {
                 var res = Encoding.UTF8.GetString(buffer, 0, lastLineCollection);
