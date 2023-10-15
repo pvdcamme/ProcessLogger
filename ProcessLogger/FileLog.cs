@@ -42,7 +42,7 @@ namespace FileLog
 
     public class ReverseFileReader: IDisposable
     {
-        private static readonly byte[] newLineSplt = Encoding.UTF8.GetBytes("\r\n");
+        private static readonly byte[] reverseSearch = Encoding.UTF8.GetBytes("\r\n").Reverse().ToArray();
         private readonly string _name;
         private readonly List<string> _lines;
         private long _read_offset;
@@ -73,34 +73,37 @@ namespace FileLog
 
         private void FillBuffer()
         {
-            if(_read_offset == 0 )
+            if (_read_offset == 0)
             {
                 return;
             }
 
             byte[] buffer = new byte[_bufferSize];
-            int totalRead = CollectLastBuffer(_name,_read_offset, buffer);
+            int totalRead = CollectLastBuffer(_name, _read_offset, buffer);
             bool atFileEnd = totalRead < _bufferSize;
-            byte[] reverseSearch = newLineSplt.Reverse().ToArray();
 
             int lastLineCollection = totalRead - 1;
-            for(int ctr=lastLineCollection; ctr >= newLineSplt.Length; ctr--) 
-            {                
-                bool hasFound = ctr >= reverseSearch.Length;
-                for(int innerCtr= 0; innerCtr < reverseSearch.Length && hasFound; innerCtr++)
+            for (int ctr = lastLineCollection; ctr >= reverseSearch.Length; ctr--)
+            {
+                bool hasFound = true;
+                for (int innerCtr = 0; innerCtr < reverseSearch.Length && hasFound; innerCtr++)
                 {
-                    hasFound = (reverseSearch[innerCtr] == buffer[ctr - innerCtr]) && hasFound;
+                    hasFound = reverseSearch[innerCtr] == buffer[ctr - innerCtr];
                 }
-                if (hasFound && (lastLineCollection - ctr) > reverseSearch.Length)
+                if(!hasFound)
+                {
+                    continue;
+                }
+
+                if ((lastLineCollection - ctr) > reverseSearch.Length)
                 {
                     int lineStart = ctr + 1;
-                    var res = Encoding.UTF8.GetString(buffer, lineStart, lastLineCollection-lineStart);
+                    var res = Encoding.UTF8.GetString(buffer, lineStart, lastLineCollection - lineStart);
                     _lines.Add(res);
                 }
-                if (hasFound)
-                {
-                    lastLineCollection = ctr - reverseSearch.Length + 1;
-                }
+                lastLineCollection = ctr - reverseSearch.Length + 1;
+                ctr = lastLineCollection - reverseSearch.Length;
+                
             }
             if (atFileEnd)
             {
@@ -110,7 +113,7 @@ namespace FileLog
             }
             else
             {
-                _read_offset -= totalRead - (lastLineCollection + newLineSplt.Length);
+                _read_offset -= totalRead - (lastLineCollection + reverseSearch.Length);
             }
             _lines.Reverse();
         }
