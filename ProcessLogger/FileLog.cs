@@ -60,27 +60,27 @@ namespace FileLog
             // Not required at the moment.
         }
 
-        private (bool, byte[]) CollectLastBuffer()
+        private static (bool, byte[]) CollectLastBuffer(string name, long startPosition, int maxSize)
         {            
-            using FileStream file = new(_name, FileMode.Open);
+            using FileStream file = new(name, FileMode.Open);
             int toread;
-            if(_read_offset > (long) _bufferSize)
+            if(startPosition > (long)maxSize)
             {
-                file.Position = _read_offset - _bufferSize;
-                toread = _bufferSize;
+                file.Position = startPosition - maxSize;
+                toread = maxSize;
             }
             else
             {
-                toread = (int) _read_offset;
+                toread = (int) startPosition;
             }
             byte[] result = new byte[toread];
             file.ReadExactly(result, 0, toread);
-            return ((_read_offset < _bufferSize), result);
+            return ((startPosition < maxSize), result);
         }
 
         private void FillBuffer()
         {
-            (bool lastRead, byte[] buffer) = CollectLastBuffer();
+            (bool lastRead, byte[] buffer) = CollectLastBuffer(_name,_read_offset, _bufferSize);
             byte[] toSearch = Encoding.UTF8.GetBytes("\r\n");
             List<byte> partialLine = new();
             for(int ctr=buffer.Length-toSearch.Length; ctr >= 0; ctr--) 
