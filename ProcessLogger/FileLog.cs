@@ -1,4 +1,7 @@
-﻿namespace FileLog
+﻿using System.Reflection.Metadata;
+using System.Text;
+
+namespace FileLog
 {
     // A single Logged value, as captured at a specific moment.    
     public readonly struct LogEntry
@@ -41,12 +44,15 @@
         private readonly string _name;
         private readonly List<string> _lines;
         private long _read_offset;
+        private readonly int _bufferSize = 1024 * 128;
 
         public ReverseFileReader(string name)
         {
             _name = name;
             _lines = new List<string>();
-                               
+
+            using FileStream _file = new(_name, FileMode.Open);
+            _read_offset = _file.Length;
         }
 
         public void Dispose()
@@ -54,8 +60,61 @@
             // Not required at the moment.
         }
 
-        private void fillBuffer()
+        private (bool, byte[]) CollectLastBuffer()
+        {            
+            using FileStream file = new(_name, FileMode.Open);
+            int toread;
+            if(_read_offset > (long) _bufferSize)
+            {
+                file.Position = _read_offset - _bufferSize;
+                toread = _bufferSize;
+            }
+            else
+            {
+                toread = (int) _read_offset;
+            }
+            byte[] result = new byte[toread];
+            file.ReadExactly(result, 0, toread);
+            return ((_read_offset < _bufferSize), result);
+        }
+
+        private void FillBuffer2()
         {
+            (bool lastRead, byte[] buffer) = CollectLastBuffer();
+            byte[] toSearch = Encoding.UTF8.GetBytes("\r\n");
+            List<byte> partialLine = new();
+            for(int ctr=buffer.Length-toSearch.Length; ctr >= 0; ctr--) 
+            {
+                partialLine.Insert(0, buffer[ctr]);
+                bool hasFound = true;
+                for(int innerCtr= 0; innerCtr < toSearch.Length && hasFound; innerCtr++)
+                {
+                    hasFound = (toSearch[innerCtr] == buffer[ctr + innerCtr]) && hasFound;
+                }
+                if (hasFound && partialLine.Count > toSearch.Length)
+                {
+                    partialLine.RemoveRange(0, toSearch.Length);
+                    string res = Encoding.UTF8.GetString(partialLine.ToArray());
+                    _lines.Add(res);
+                }
+                if (hasFound)
+                {
+                    partialLine.Clear();
+                }
+            }
+            if (lastRead)
+            {
+                string res = Encoding.UTF8.GetString(partialLine.ToArray());
+                _lines.Add(res);
+            } else
+            {
+                _read_offset -= (buffer.Length - partialLine.Count);
+            }
+            _lines.Reverse();
+        }
+
+        private void FillBuffer()
+        {            
             using StreamReader _stream = new(_name);
             string? line;
             while (null != (line = _stream.ReadLine()))
@@ -69,7 +128,7 @@
         {
             if(_lines.Count == 0)
             {
-                fillBuffer();
+                FillBuffer2();
             }
             if (_lines.Count > 0)
             {
