@@ -78,7 +78,7 @@ namespace FileLog
             return ((_read_offset < _bufferSize), result);
         }
 
-        private void FillBuffer2()
+        private void FillBuffer()
         {
             (bool lastRead, byte[] buffer) = CollectLastBuffer();
             byte[] toSearch = Encoding.UTF8.GetBytes("\r\n");
@@ -113,22 +113,11 @@ namespace FileLog
             _lines.Reverse();
         }
 
-        private void FillBuffer()
-        {            
-            using StreamReader _stream = new(_name);
-            string? line;
-            while (null != (line = _stream.ReadLine()))
-            {
-                _lines.Add(line);
-            }
-            _read_offset = 0;
-        }
-
         public string ReadLine()
         {
             if(_lines.Count == 0)
             {
-                FillBuffer2();
+                FillBuffer();
             }
             if (_lines.Count > 0)
             {
